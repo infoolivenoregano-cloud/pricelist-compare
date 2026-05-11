@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base
@@ -7,9 +8,12 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Pricelist Comparator")
 
+_origins_env = os.getenv("ALLOWED_ORIGINS", "*")
+origins = ["*"] if _origins_env == "*" else [o.strip() for o in _origins_env.split(",")]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
