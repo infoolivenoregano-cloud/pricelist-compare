@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: pricelist
+      POSTGRES_USER: pricelist
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-pricelist123}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pricelist"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql://pricelist:${DB_PASSWORD:-pricelist123}@db:5432/pricelist
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - uploads_data:/uploads
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  uploads_data:
