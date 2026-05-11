@@ -1,7 +1,20 @@
-from sqlalchemy import Column, Integer, String, Float, Date, DateTime, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, Float, Date, DateTime, ForeignKey, Text, Boolean
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from .database import Base
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    email = Column(String, unique=True, nullable=False, index=True)
+    password_hash = Column(String, nullable=False)
+    restaurant_name = Column(String, nullable=True)
+    role = Column(String, default="owner")  # owner | manager | admin
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 
 class Distributor(Base):
@@ -102,3 +115,27 @@ class OrderLine(Base):
 
     session = relationship("OrderSession", back_populates="lines")
     upload_item = relationship("UploadItem")
+
+
+class ChatMessage(Base):
+    __tablename__ = "chat_messages"
+
+    id = Column(Integer, primary_key=True, index=True)
+    author = Column(String, nullable=False)
+    text = Column(Text, nullable=False)
+    item_ref = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class TableInterest(Base):
+    __tablename__ = "table_interest"
+
+    id = Column(Integer, primary_key=True, index=True)
+    restaurant_name = Column(String, nullable=False)
+    contact_name = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    tier = Column(String, nullable=False)  # 'professional' | 'enterprise'
+    locations = Column(Integer, default=1)
+    notes = Column(Text, nullable=True)
+    status = Column(String, default='pending')  # pending | contacted | subscribed
+    created_at = Column(DateTime, default=datetime.utcnow)

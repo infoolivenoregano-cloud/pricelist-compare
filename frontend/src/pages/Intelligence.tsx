@@ -98,7 +98,7 @@ export default function Intelligence() {
               key={t.id}
               onClick={() => setTab(t.id)}
               className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                tab === t.id ? 'bg-emerald-700 text-white' : 'text-gray-500 hover:bg-gray-100'
+                tab === t.id ? 'bg-blue-700 text-white' : 'text-gray-500 hover:bg-blue-50 hover:text-blue-700'
               }`}
             >
               {t.label}

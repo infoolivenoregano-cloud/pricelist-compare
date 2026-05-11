@@ -85,7 +85,7 @@ export default function Items() {
             key={t}
             onClick={() => setTab(t)}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-              tab === t ? 'border-green-700 text-green-700' : 'border-transparent text-gray-500 hover:text-gray-700'
+              tab === t ? 'border-blue-700 text-blue-700' : 'border-transparent text-gray-500 hover:text-blue-600'
             }`}
           >
             {t === 'unlinked' ? `Unlinked (${unlinked.length})` : `Catalog (${catalog.length})`}

@@ -3,6 +3,36 @@ from typing import Optional, List, Dict, Any
 from datetime import date, datetime
 
 
+class SignupRequest(BaseModel):
+    name: str
+    email: str
+    password: str
+    restaurant_name: Optional[str] = None
+
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+class UserOut(BaseModel):
+    id: int
+    name: str
+    email: str
+    restaurant_name: Optional[str]
+    role: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class TokenOut(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserOut
+
+
 class DistributorCreate(BaseModel):
     name: str
     color: str = "#6B7280"
@@ -190,6 +220,47 @@ class OrderSessionOut(BaseModel):
     notes: Optional[str]
     lines: List[OrderLineOut] = []
     grand_total: float = 0
+
+    class Config:
+        from_attributes = True
+
+
+class ChatMessageCreate(BaseModel):
+    author: str
+    text: str
+    item_ref: Optional[str] = None
+
+
+class ChatMessageOut(BaseModel):
+    id: int
+    author: str
+    text: str
+    item_ref: Optional[str]
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class TableInterestCreate(BaseModel):
+    restaurant_name: str
+    contact_name: str
+    email: str
+    tier: str
+    locations: int = 1
+    notes: Optional[str] = None
+
+
+class TableInterestOut(BaseModel):
+    id: int
+    restaurant_name: str
+    contact_name: str
+    email: str
+    tier: str
+    locations: int
+    notes: Optional[str]
+    status: str
+    created_at: datetime
 
     class Config:
         from_attributes = True

@@ -7,6 +7,8 @@ import Items from './pages/Items'
 import Orders from './pages/Orders'
 import Settings from './pages/Settings'
 import Intelligence from './pages/Intelligence'
+import Distributors from './pages/Distributors'
+import TheTable from './pages/TheTable'
 
 export default function App() {
   return (
@@ -22,6 +24,8 @@ export default function App() {
       <Route path="/orders/:id" element={<Layout><Orders /></Layout>} />
       <Route path="/settings" element={<Layout><Settings /></Layout>} />
       <Route path="/intelligence" element={<Layout><Intelligence /></Layout>} />
+      <Route path="/distributors" element={<Layout><Distributors /></Layout>} />
+      <Route path="/the-table" element={<Layout><TheTable /></Layout>} />
     </Routes>
   )
 }

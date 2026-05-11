@@ -1,5 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { X, Eye, EyeOff, ChevronRight, LogOut, User } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
 
 const TICKER_ITEMS = [
   { dist: 'GINSBERGS', item: 'Chicken Breast', price: '$3.82', change: '+2.1%', up: true },
@@ -18,9 +20,46 @@ const TICKER_ITEMS = [
 
 const DOUBLED = [...TICKER_ITEMS, ...TICKER_ITEMS]
 
+type ModalMode = 'login' | 'signup' | null
+
 export default function Welcome() {
   const navigate = useNavigate()
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { user, login, signup, logout } = useAuth()
+  const [modal, setModal] = useState<ModalMode>(null)
+  const [showPw, setShowPw] = useState(false)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [form, setForm] = useState({ name: '', email: '', password: '', restaurant_name: '' })
+
+  function openModal(mode: ModalMode) {
+    setModal(mode)
+    setError('')
+    setShowPw(false)
+    setForm({ name: '', email: '', password: '', restaurant_name: '' })
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
+    try {
+      if (modal === 'login') {
+        await login(form.email, form.password)
+      } else {
+        await signup(form.name, form.email, form.password, form.restaurant_name || undefined)
+      }
+      setModal(null)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Something went wrong')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  function f(key: keyof typeof form, val: string) {
+    setForm(prev => ({ ...prev, [key]: val }))
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -233,31 +272,234 @@ export default function Welcome() {
           </span>
         </div>
 
-        <div
-          className="flex items-center gap-0.5 rounded-full px-1.5 py-1"
-          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-        >
-          {[
-            { label: 'Portfolio', path: '/compare' },
-            { label: 'Intelligence', path: '/intelligence' },
-            { label: 'Upload', path: '/upload' },
-            { label: 'Orders', path: '/orders' },
-          ].map((item, i) => (
-            <button
-              key={item.label}
-              onClick={() => navigate(item.path)}
-              className="px-4 py-1.5 rounded-full text-xs font-medium transition-all"
-              style={
-                i === 0
-                  ? { background: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.92)' }
-                  : { color: 'rgba(255,255,255,0.32)' }
-              }
-            >
-              {item.label}
-            </button>
-          ))}
+        <div className="flex items-center gap-3">
+          <div
+            className="flex items-center gap-0.5 rounded-full px-1.5 py-1"
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            {[
+              { label: 'Portfolio', path: '/compare' },
+              { label: 'Intelligence', path: '/intelligence' },
+              { label: 'Upload', path: '/upload' },
+              { label: 'Orders', path: '/orders' },
+            ].map((item, i) => (
+              <button
+                key={item.label}
+                onClick={() => navigate(item.path)}
+                className="px-4 py-1.5 rounded-full text-xs font-medium transition-all"
+                style={
+                  i === 0
+                    ? { background: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.92)' }
+                    : { color: 'rgba(255,255,255,0.32)' }
+                }
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Auth buttons */}
+          {user ? (
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full"
+                style={{ background: 'rgba(37,99,235,0.18)', border: '1px solid rgba(96,165,250,0.25)' }}>
+                <User size={12} style={{ color: '#93c5fd' }} />
+                <span className="text-xs font-semibold" style={{ color: '#93c5fd' }}>
+                  {user.name.split(' ')[0]}
+                </span>
+              </div>
+              <button
+                onClick={logout}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all"
+                style={{ border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.35)' }}
+              >
+                <LogOut size={11} /> Sign out
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => openModal('login')}
+                className="px-4 py-1.5 rounded-full text-xs font-semibold transition-all"
+                style={{ border: '1px solid rgba(96,165,250,0.25)', color: 'rgba(147,197,253,0.85)' }}
+              >
+                Log In
+              </button>
+              <button
+                onClick={() => openModal('signup')}
+                className="px-4 py-1.5 rounded-full text-xs font-bold transition-all"
+                style={{ background: '#2563eb', color: '#fff' }}
+              >
+                Sign Up
+              </button>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* ── Auth Modal ── */}
+      {modal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(4,10,28,0.82)', backdropFilter: 'blur(8px)' }}
+          onClick={e => { if (e.target === e.currentTarget) setModal(null) }}
+        >
+          <div
+            className="w-full max-w-sm rounded-2xl overflow-hidden"
+            style={{ background: '#0b1e42', border: '1px solid rgba(96,165,250,0.18)', boxShadow: '0 24px 80px rgba(0,0,0,0.7)' }}
+          >
+            {/* Modal header */}
+            <div className="px-7 pt-7 pb-5 flex items-start justify-between"
+              style={{ borderBottom: '1px solid rgba(96,165,250,0.1)' }}>
+              <div>
+                <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#60a5fa' }}>
+                  {modal === 'login' ? 'Welcome back' : 'Create account'}
+                </div>
+                <h2 className="text-xl font-black text-white">
+                  {modal === 'login' ? 'Log In' : 'Sign Up'}
+                </h2>
+                <p className="text-xs mt-1" style={{ color: 'rgba(147,197,253,0.5)' }}>
+                  {modal === 'login'
+                    ? 'Sign in to your Olive & Oregano account'
+                    : 'Join the 1LT platform — free to start'}
+                </p>
+              </div>
+              <button onClick={() => setModal(null)} className="transition-colors mt-1" style={{ color: 'rgba(147,197,253,0.4)' }}>
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="px-7 py-6 flex flex-col gap-4">
+              {modal === 'signup' && (
+                <div>
+                  <label className="block text-xs font-semibold mb-1.5" style={{ color: 'rgba(147,197,253,0.6)' }}>
+                    Full Name *
+                  </label>
+                  <input
+                    required
+                    autoFocus
+                    className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none transition-all"
+                    style={{
+                      background: 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(96,165,250,0.2)',
+                      color: '#fff',
+                    }}
+                    placeholder="Your full name"
+                    value={form.name}
+                    onChange={e => f('name', e.target.value)}
+                  />
+                </div>
+              )}
+
+              {modal === 'signup' && (
+                <div>
+                  <label className="block text-xs font-semibold mb-1.5" style={{ color: 'rgba(147,197,253,0.6)' }}>
+                    Restaurant Name
+                  </label>
+                  <input
+                    className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none transition-all"
+                    style={{
+                      background: 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(96,165,250,0.2)',
+                      color: '#fff',
+                    }}
+                    placeholder="e.g. Olive & Oregano"
+                    value={form.restaurant_name}
+                    onChange={e => f('restaurant_name', e.target.value)}
+                  />
+                </div>
+              )}
+
+              <div>
+                <label className="block text-xs font-semibold mb-1.5" style={{ color: 'rgba(147,197,253,0.6)' }}>
+                  Email *
+                </label>
+                <input
+                  required
+                  type="email"
+                  autoFocus={modal === 'login'}
+                  className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none transition-all"
+                  style={{
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(96,165,250,0.2)',
+                    color: '#fff',
+                  }}
+                  placeholder="you@restaurant.com"
+                  value={form.email}
+                  onChange={e => f('email', e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold mb-1.5" style={{ color: 'rgba(147,197,253,0.6)' }}>
+                  Password *
+                </label>
+                <div className="relative">
+                  <input
+                    required
+                    type={showPw ? 'text' : 'password'}
+                    className="w-full px-3.5 py-2.5 pr-10 rounded-lg text-sm outline-none transition-all"
+                    style={{
+                      background: 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(96,165,250,0.2)',
+                      color: '#fff',
+                    }}
+                    placeholder={modal === 'signup' ? 'At least 8 characters' : 'Your password'}
+                    minLength={modal === 'signup' ? 8 : undefined}
+                    value={form.password}
+                    onChange={e => f('password', e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPw(v => !v)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
+                    style={{ color: 'rgba(96,165,250,0.45)' }}
+                  >
+                    {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </button>
+                </div>
+              </div>
+
+              {error && (
+                <div className="text-xs font-medium px-3.5 py-2.5 rounded-lg"
+                  style={{ background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.25)', color: '#fca5a5' }}>
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                style={{ background: '#2563eb', color: '#fff' }}
+              >
+                {loading ? 'Please wait…' : (
+                  <>{modal === 'login' ? 'Log In' : 'Create Account'} <ChevronRight size={15} /></>
+                )}
+              </button>
+
+              <p className="text-center text-xs" style={{ color: 'rgba(147,197,253,0.4)' }}>
+                {modal === 'login' ? (
+                  <>No account?{' '}
+                    <button type="button" onClick={() => openModal('signup')}
+                      className="font-semibold transition-colors" style={{ color: '#60a5fa' }}>
+                      Sign up free
+                    </button>
+                  </>
+                ) : (
+                  <>Already have an account?{' '}
+                    <button type="button" onClick={() => openModal('login')}
+                      className="font-semibold transition-colors" style={{ color: '#60a5fa' }}>
+                      Log in
+                    </button>
+                  </>
+                )}
+              </p>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* ── Hero — LEFT aligned ── */}
       <div
