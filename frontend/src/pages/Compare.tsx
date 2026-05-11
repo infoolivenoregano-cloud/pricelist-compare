@@ -8,7 +8,7 @@ function fmt(n: number) {
 }
 
 function foodCostColor(pct: number) {
-  if (pct < 28) return 'text-emerald-600 font-semibold'
+  if (pct < 28) return 'text-blue-700 font-semibold'
   if (pct < 35) return 'text-amber-600'
   return 'text-red-600 font-semibold'
 }
@@ -22,7 +22,7 @@ function ChangeChip({ pct }: { pct?: number }) {
     </span>
   )
   return (
-    <span className="inline-flex items-center gap-0.5 text-emerald-600 text-[11px] font-medium">
+    <span className="inline-flex items-center gap-0.5 text-blue-600 text-[11px] font-medium">
       <TrendingDown size={10} />{pct.toFixed(1)}%
     </span>
   )
@@ -133,7 +133,7 @@ export default function Compare() {
         <ShoppingCart size={40} className="text-gray-200" />
         <p className="font-medium text-gray-600">No data yet</p>
         <p className="text-sm">Upload a pricelist to get started</p>
-        <a href="/upload" className="mt-2 px-5 py-2 bg-green-800 text-white text-sm font-semibold rounded-full hover:bg-green-700 transition-colors">
+        <a href="/upload" className="mt-2 px-5 py-2 bg-blue-800 text-white text-sm font-semibold rounded-full hover:bg-blue-700 transition-colors">
           Go to Upload
         </a>
       </div>
@@ -207,7 +207,7 @@ export default function Compare() {
             {selectedCount > 0 && (
               <button
                 onClick={handleBuildOrder}
-                className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-green-800 text-white text-xs font-semibold rounded-full hover:bg-green-700 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-blue-800 text-white text-xs font-semibold rounded-full hover:bg-blue-700 transition-colors"
               >
                 <ShoppingCart size={12} />
                 Build Order ({selectedCount})
@@ -229,7 +229,7 @@ export default function Compare() {
               <div className="text-[10px] text-gray-400 uppercase tracking-widest mb-0.5">Price Leader</div>
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: bestDistribStats.color }} />
-                <span className="text-2xl font-bold text-emerald-700 leading-none">{bestDistribStats.name}</span>
+                <span className="text-2xl font-bold text-blue-700 leading-none">{bestDistribStats.name}</span>
               </div>
               <div className="text-[10px] text-gray-400 mt-0.5">cheapest on {bestDistribStats.count} items</div>
             </div>
@@ -335,7 +335,7 @@ export default function Compare() {
                   key={item.canonical_id}
                   onClick={() => toggleItem(item)}
                   className={`border-b border-gray-50 cursor-pointer transition-colors ${
-                    isChecked ? 'bg-emerald-50/60' : 'hover:bg-gray-50/70'
+                    isChecked ? 'bg-blue-50/60' : 'hover:bg-gray-50/70'
                   }`}
                 >
                   <td className="px-4 py-3.5">
@@ -363,9 +363,9 @@ export default function Compare() {
                     return (
                       <td
                         key={d.id}
-                        className={`px-4 py-3.5 text-center ${isBest ? 'bg-emerald-50' : ''}`}
+                        className={`px-4 py-3.5 text-center ${isBest ? 'bg-blue-50' : ''}`}
                       >
-                        <div className={`font-semibold ${isBest ? 'text-emerald-700' : 'text-gray-800'}`}>
+                        <div className={`font-semibold ${isBest ? 'text-blue-700' : 'text-gray-800'}`}>
                           {fmt(entry.price)}
                         </div>
                         {entry.pack_size && (
@@ -378,7 +378,7 @@ export default function Compare() {
 
                   <td className="px-4 py-3.5 text-center">
                     {bestPrice !== undefined
-                      ? <span className="font-bold text-emerald-700">{fmt(bestPrice)}</span>
+                      ? <span className="font-bold text-blue-700">{fmt(bestPrice)}</span>
                       : <span className="text-gray-200">—</span>}
                   </td>
                   <td className="px-4 py-3.5 text-center text-gray-500">
@@ -427,7 +427,7 @@ export default function Compare() {
                 Cancel
               </button>
               <button
-                className="flex-1 px-4 py-2.5 bg-green-800 text-white rounded-xl text-sm font-semibold hover:bg-green-700 transition-colors disabled:opacity-50"
+                className="flex-1 px-4 py-2.5 bg-blue-800 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
                 onClick={handleConfirmOrder}
                 disabled={createOrderMutation.isPending}
               >
