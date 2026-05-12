@@ -39,9 +39,9 @@ export default function Orders() {
   })
 
   return (
-    <div className="flex h-full">
-      {/* Sidebar list */}
-      <div className="w-72 border-r border-gray-200 bg-white flex flex-col shrink-0">
+    <div className="flex flex-col sm:flex-row h-full">
+      {/* Order list — full width on mobile, fixed sidebar on sm+ */}
+      <div className={`sm:w-72 border-b sm:border-b-0 sm:border-r border-gray-200 bg-white flex flex-col shrink-0 ${selectedId ? 'hidden sm:flex' : 'flex'}`}>
         <div className="px-4 py-4 border-b border-gray-100">
           <h1 className="font-bold text-gray-900">Order Lists</h1>
           <p className="text-xs text-gray-400 mt-0.5">Created from Compare view</p>
@@ -57,7 +57,7 @@ export default function Orders() {
               key={o.id}
               onClick={() => setSelectedId(o.id)}
               className={`w-full text-left px-4 py-3.5 border-b border-gray-100 hover:bg-gray-50 transition-colors flex items-center justify-between ${
-                selectedId === o.id ? 'bg-green-50 border-l-2 border-l-green-700' : ''
+                selectedId === o.id ? 'bg-blue-50 border-l-2 border-l-blue-700' : ''
               }`}
             >
               <div>
@@ -70,22 +70,31 @@ export default function Orders() {
         </div>
       </div>
 
-      {/* Detail */}
-      <div className="flex-1 overflow-auto">
+      {/* Detail — full screen on mobile when order selected */}
+      <div className={`flex-1 overflow-auto ${selectedId ? 'block' : 'hidden sm:block'}`}>
         {!selectedId && (
           <div className="flex items-center justify-center h-full text-gray-400">
             Select an order to view details
           </div>
         )}
         {selectedId && session && (
-          <OrderDetail
-            session={session}
-            onDelete={() => {
-              if (confirm('Delete this order?')) deleteMutation.mutate(session.id)
-            }}
-            onUpdateQty={(lineId, qty) => updateQtyMutation.mutate({ sessionId: session.id, lineId, qty })}
-            onRemoveLine={(lineId) => removeMutation.mutate({ sessionId: session.id, lineId })}
-          />
+          <>
+            {/* Back button on mobile */}
+            <button
+              onClick={() => setSelectedId(null)}
+              className="sm:hidden flex items-center gap-1 px-4 py-3 text-sm text-blue-700 font-medium border-b border-gray-100 w-full bg-white"
+            >
+              ← Back to orders
+            </button>
+            <OrderDetail
+              session={session}
+              onDelete={() => {
+                if (confirm('Delete this order?')) deleteMutation.mutate(session.id)
+              }}
+              onUpdateQty={(lineId, qty) => updateQtyMutation.mutate({ sessionId: session.id, lineId, qty })}
+              onRemoveLine={(lineId) => removeMutation.mutate({ sessionId: session.id, lineId })}
+            />
+          </>
         )}
       </div>
     </div>
@@ -113,13 +122,13 @@ function OrderDetail({ session, onDelete, onUpdateQty, onRemoveLine }: {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="max-w-4xl mx-auto py-6 sm:py-8 px-4 sm:px-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
         <div>
           <h2 className="text-xl font-bold">{session.name || `Order #${session.id}`}</h2>
           <p className="text-sm text-gray-500">Week of {session.week_date} · Created {new Date(session.created_at).toLocaleDateString()}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 shrink-0">
           <button onClick={handlePrint} className="btn-secondary">
             <Printer size={15} /> Print
           </button>
@@ -147,6 +156,7 @@ function OrderDetail({ session, onDelete, onUpdateQty, onRemoveLine }: {
                 </div>
                 <span className="text-sm font-bold text-gray-700">Subtotal: {fmt(subtotal)}</span>
               </div>
+              <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
                   <tr>
@@ -189,6 +199,7 @@ function OrderDetail({ session, onDelete, onUpdateQty, onRemoveLine }: {
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
           )
         })}
@@ -197,7 +208,7 @@ function OrderDetail({ session, onDelete, onUpdateQty, onRemoveLine }: {
       <div className="mt-6 flex justify-end">
         <div className="text-right">
           <div className="text-sm text-gray-500 mb-1">Grand Total</div>
-          <div className="text-3xl font-bold text-green-800">{fmt(session.grand_total)}</div>
+          <div className="text-3xl font-bold text-blue-800">{fmt(session.grand_total)}</div>
         </div>
       </div>
     </div>

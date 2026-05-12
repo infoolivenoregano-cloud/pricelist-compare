@@ -259,7 +259,7 @@ export default function Welcome() {
       />
 
       {/* ── Top nav ── */}
-      <div className="relative z-10 flex items-center justify-between px-10 pt-7">
+      <div className="relative z-10 flex items-center justify-between px-4 sm:px-10 pt-5 sm:pt-7">
         <div className="flex items-center gap-2.5">
           <div
             className="w-7 h-7 rounded-md flex items-center justify-center"
@@ -272,9 +272,10 @@ export default function Welcome() {
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Nav pills — hidden on small mobile */}
           <div
-            className="flex items-center gap-0.5 rounded-full px-1.5 py-1"
+            className="hidden sm:flex items-center gap-0.5 rounded-full px-1.5 py-1"
             style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
           >
             {[
@@ -286,7 +287,7 @@ export default function Welcome() {
               <button
                 key={item.label}
                 onClick={() => navigate(item.path)}
-                className="px-4 py-1.5 rounded-full text-xs font-medium transition-all"
+                className="px-3 sm:px-4 py-1.5 rounded-full text-xs font-medium transition-all"
                 style={
                   i === 0
                     ? { background: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.92)' }
@@ -503,70 +504,56 @@ export default function Welcome() {
 
       {/* ── Hero — LEFT aligned ── */}
       <div
-        className="relative z-10 flex flex-col justify-center h-full px-16 pb-44"
-        style={{ maxWidth: '50%' }}
+        className="relative z-10 flex flex-col justify-center h-full px-6 sm:px-16 pb-32 sm:pb-44"
+        style={{ maxWidth: '100%', width: '100%' }}
       >
-        {/* Status pill */}
-        <div
-          className="mb-8 inline-flex items-center gap-2 w-fit rounded-full px-4 py-1.5"
-          style={{ background: 'rgba(96,165,250,0.08)', border: '1px solid rgba(96,165,250,0.2)' }}
-        >
-          <span
-            className="w-1.5 h-1.5 rounded-full animate-pulse"
-            style={{ background: '#60a5fa' }}
-          />
-          <span
-            className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-            style={{ color: 'rgba(147,197,253,0.8)' }}
+        <div style={{ maxWidth: '520px' }}>
+          {/* Status pill */}
+          <div
+            className="mb-6 sm:mb-8 inline-flex items-center gap-2 w-fit rounded-full px-3 sm:px-4 py-1.5"
+            style={{ background: 'rgba(96,165,250,0.08)', border: '1px solid rgba(96,165,250,0.2)' }}
           >
-            Food Cost Intelligence
-          </span>
-        </div>
-
-        {/* Headline */}
-        <h1
-          className="font-black leading-[0.93] tracking-tight mb-7"
-          style={{ fontSize: '72px' }}
-        >
-          <span className="block" style={{ color: '#ffffff' }}>Control Your</span>
-          <span className="block" style={{ color: '#ffffff' }}>Food Costs.</span>
-          <span className="block" style={{ color: 'rgba(96,165,250,0.22)' }}>Own Every</span>
-          <span className="block" style={{ color: 'rgba(96,165,250,0.22)' }}>Margin.</span>
-        </h1>
-
-        <p
-          className="text-sm leading-relaxed max-w-[300px] mb-10"
-          style={{ color: 'rgba(147,197,253,0.38)' }}
-        >
-          Upload distributor pricelists every Sunday. Instantly see who's cheapest — by item, by category, week over week.
-        </p>
-
-        {/* CTAs */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate('/compare')}
-            className="flex items-center gap-2.5 px-6 py-3 rounded-full text-sm font-semibold transition-all"
-            style={{
-              background: 'rgba(96,165,250,0.10)',
-              border: '1px solid rgba(96,165,250,0.25)',
-              color: '#fff',
-            }}
-          >
-            <span
-              className="flex items-center justify-center w-5 h-5 rounded-full"
-              style={{ border: '1px solid rgba(52,211,153,0.4)', background: 'rgba(52,211,153,0.10)' }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#34d399' }} />
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#60a5fa' }} />
+            <span className="text-[10px] font-semibold uppercase tracking-[0.22em]" style={{ color: 'rgba(147,197,253,0.8)' }}>
+              Food Cost Intelligence
             </span>
-            Open Dashboard
-          </button>
-          <button
-            onClick={() => navigate('/upload')}
-            className="px-6 py-3 rounded-full text-sm font-medium transition-all"
-            style={{ border: '1px solid rgba(96,165,250,0.1)', color: 'rgba(147,197,253,0.38)' }}
-          >
-            Upload Pricelist
-          </button>
+          </div>
+
+          {/* Headline */}
+          <h1 className="font-black leading-[0.93] tracking-tight mb-6 sm:mb-7"
+            style={{ fontSize: 'clamp(38px, 8vw, 72px)' }}>
+            <span className="block" style={{ color: '#ffffff' }}>Control Your</span>
+            <span className="block" style={{ color: '#ffffff' }}>Food Costs.</span>
+            <span className="block" style={{ color: 'rgba(96,165,250,0.22)' }}>Own Every</span>
+            <span className="block" style={{ color: 'rgba(96,165,250,0.22)' }}>Margin.</span>
+          </h1>
+
+          <p className="text-sm leading-relaxed mb-8 sm:mb-10 max-w-xs sm:max-w-sm"
+            style={{ color: 'rgba(147,197,253,0.38)' }}>
+            Upload distributor pricelists every Sunday. Instantly see who's cheapest — by item, by category, week over week.
+          </p>
+
+          {/* CTAs */}
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => navigate('/compare')}
+              className="flex items-center gap-2.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-sm font-semibold transition-all"
+              style={{ background: 'rgba(96,165,250,0.10)', border: '1px solid rgba(96,165,250,0.25)', color: '#fff' }}
+            >
+              <span className="flex items-center justify-center w-5 h-5 rounded-full"
+                style={{ border: '1px solid rgba(52,211,153,0.4)', background: 'rgba(52,211,153,0.10)' }}>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#34d399' }} />
+              </span>
+              Open Dashboard
+            </button>
+            <button
+              onClick={() => navigate('/upload')}
+              className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-sm font-medium transition-all"
+              style={{ border: '1px solid rgba(96,165,250,0.1)', color: 'rgba(147,197,253,0.38)' }}
+            >
+              Upload Pricelist
+            </button>
+          </div>
         </div>
       </div>
 

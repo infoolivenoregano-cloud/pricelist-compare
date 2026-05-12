@@ -144,7 +144,7 @@ export default function TheTable() {
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
       <div style={{ background: 'linear-gradient(135deg, #071733 0%, #0b1e42 60%, #0f2d5e 100%)' }}>
-        <div className="px-10 pt-12 pb-14">
+        <div className="px-5 sm:px-10 pt-8 sm:pt-12 pb-10 sm:pb-14">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-6 text-xs font-semibold tracking-widest uppercase"
             style={{ background: 'rgba(37,99,235,0.25)', color: '#93c5fd', border: '1px solid rgba(96,165,250,0.3)' }}>
@@ -188,7 +188,7 @@ export default function TheTable() {
       </div>
 
       {/* Sub-systems */}
-      <div className="px-10 py-10">
+      <div className="px-5 sm:px-10 py-8 sm:py-10">
         <div className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-6">Three integrated sub-systems</div>
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
           {SUBSYSTEMS.map(s => {
@@ -223,7 +223,7 @@ export default function TheTable() {
       </div>
 
       {/* Pricing */}
-      <div className="px-10 pb-10">
+      <div className="px-5 sm:px-10 pb-8 sm:pb-10">
         <div className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-6">Pricing tiers</div>
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           {TIERS.map(tier => (
@@ -272,7 +272,7 @@ export default function TheTable() {
       </div>
 
       {/* How reciprocity works */}
-      <div className="px-10 pb-12">
+      <div className="px-5 sm:px-10 pb-10 sm:pb-12">
         <div className="rounded-2xl bg-white border border-gray-100 p-7" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.05)' }}>
           <div className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">How the Reciprocity Gate works</div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 text-sm">

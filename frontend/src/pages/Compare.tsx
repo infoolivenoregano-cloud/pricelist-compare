@@ -251,14 +251,14 @@ export default function Compare() {
     <div className="flex flex-col h-full bg-white">
 
       {/* ── Header ── */}
-      <div className="bg-white border-b border-gray-100 px-6 pt-5 pb-0 shrink-0">
+      <div className="bg-white border-b border-gray-100 px-4 sm:px-6 pt-5 pb-0 shrink-0">
         <div className="text-[10px] text-gray-400 uppercase tracking-[0.18em] mb-3">
           Olive &amp; Oregano &nbsp;·&nbsp; Procurement
         </div>
 
-        <div className="flex items-start gap-4 mb-5">
+        <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4 mb-5">
           <div className="flex-1 min-w-0">
-            <h1 className="text-[22px] font-bold text-gray-900 mb-1 leading-tight">Price Comparison</h1>
+            <h1 className="text-xl sm:text-[22px] font-bold text-gray-900 mb-1 leading-tight">Price Comparison</h1>
             <div className="flex items-center gap-2 flex-wrap text-[11px] text-gray-400">
               <span>{data.week_date}</span>
               <span className="text-gray-200">·</span>
@@ -274,14 +274,14 @@ export default function Compare() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
+          <div className="flex items-center gap-2 flex-wrap">
             <select className="text-xs text-gray-600 border border-gray-200 rounded-full px-3 py-1.5 focus:outline-none focus:border-gray-400 bg-white" value={weekDate} onChange={e => setWeekDate(e.target.value)}>
               <option value="">Latest</option>
               {data.available_weeks.map(w => <option key={w} value={w}>{w}</option>)}
             </select>
             <div className="relative">
               <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              <input className="text-xs border border-gray-200 rounded-full pl-7 pr-3 py-1.5 w-40 focus:outline-none focus:border-gray-400" placeholder="Search items…" value={search} onChange={e => setSearch(e.target.value)} />
+              <input className="text-xs border border-gray-200 rounded-full pl-7 pr-3 py-1.5 w-36 sm:w-40 focus:outline-none focus:border-gray-400" placeholder="Search items…" value={search} onChange={e => setSearch(e.target.value)} />
             </div>
             <select className="text-xs text-gray-600 border border-gray-200 rounded-full px-3 py-1.5 focus:outline-none focus:border-gray-400 bg-white" value={category} onChange={e => setCategory(e.target.value)}>
               <option value="">All categories</option>
@@ -296,14 +296,14 @@ export default function Compare() {
         </div>
 
         {/* Stats bar */}
-        <div className="flex items-end gap-8 py-4 border-t border-gray-100">
-          <div>
+        <div className="flex items-end gap-5 sm:gap-8 py-4 border-t border-gray-100 overflow-x-auto">
+          <div className="shrink-0">
             <div className="text-[10px] text-gray-400 uppercase tracking-widest mb-0.5">Items Shown</div>
             <div className="text-2xl font-bold text-gray-900 leading-none">{filtered.length}</div>
             <div className="text-[10px] text-gray-400 mt-0.5">of {data.items.length} total</div>
           </div>
           {bestDistribStats && (
-            <div>
+            <div className="shrink-0">
               <div className="text-[10px] text-gray-400 uppercase tracking-widest mb-0.5">Price Leader</div>
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: bestDistribStats.color }} />
@@ -313,21 +313,21 @@ export default function Compare() {
             </div>
           )}
           {spikeCount > 0 && (
-            <div>
+            <div className="shrink-0">
               <div className="text-[10px] text-gray-400 uppercase tracking-widest mb-0.5">Price Spikes</div>
               <div className="text-2xl font-bold text-orange-600 leading-none">{spikeCount}</div>
               <div className="text-[10px] text-gray-400 mt-0.5">items up &gt;10% vs last week</div>
             </div>
           )}
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-2 shrink-0">
             {data.distributors.map(d => (
-              <div key={d.id} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-full text-[11px] font-medium text-gray-700">
+              <div key={d.id} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-full text-[11px] font-medium text-gray-700 whitespace-nowrap">
                 <span className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }} />
                 {d.name}
                 {!d.upload_id && <span className="text-gray-300">(no data)</span>}
               </div>
             ))}
-            <span className="text-[11px] text-gray-400 ml-1">{filtered.length} items</span>
+            <span className="text-[11px] text-gray-400 ml-1 whitespace-nowrap">{filtered.length} items</span>
           </div>
         </div>
 
