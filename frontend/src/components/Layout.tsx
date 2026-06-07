@@ -9,7 +9,7 @@ const nav = [
   { to: '/items',        label: 'Item Catalog',  icon: GitMerge,     premium: false },
   { to: '/orders',       label: 'Orders',        icon: ShoppingCart, premium: false },
   { to: '/distributors', label: 'Distributors',  icon: Truck,        premium: false },
-  { to: '/the-table',    label: 'The Table',     icon: Star,         premium: true  },
+  { to: '/the-mrgn',    label: 'The Mrgn™',     icon: Star,         premium: true  },
 ]
 
 export default function Layout({ children }: { children: React.ReactNode }) {
